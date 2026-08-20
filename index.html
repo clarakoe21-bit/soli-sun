@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101a2d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SOLI SUN">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <link rel="stylesheet" href="/app.css">
+  <title>SOLI SUN</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="sun">☀️</span><div><strong>SOLI SUN</strong><small>Mobile Alpha v0.2.0</small></div></div>
+      <button id="installBtn" class="ghost hidden" type="button">Installieren</button>
+    </header>
+
+    <section id="authPanel" class="card hidden">
+      <h2>Zugang</h2>
+      <p>Diese SOLI-Instanz ist geschützt. Gib den Zugangsschlüssel ein, den du beim Hosting gesetzt hast.</p>
+      <form id="authForm" class="stack">
+        <input id="tokenInput" type="password" autocomplete="current-password" placeholder="Zugangsschlüssel" required>
+        <button type="submit">Verbinden</button>
+      </form>
+      <p class="fine">Der Schlüssel wird nur auf diesem Gerät gespeichert und als Bearer-Token an dein SOLI-Backend gesendet.</p>
+    </section>
+
+    <section id="appPanel" class="app-panel hidden">
+      <nav class="tabs" aria-label="SOLI Bereiche">
+        <button class="tab active" data-view="chatView">Gespräch</button>
+        <button class="tab" data-view="memoryView">Erinnerungen</button>
+        <button class="tab" data-view="settingsView">Einstellungen</button>
+      </nav>
+
+      <section id="chatView" class="view active">
+        <div id="log" class="log" aria-live="polite"></div>
+        <form id="chatForm" class="composer">
+          <textarea id="message" rows="1" maxlength="8000" placeholder="Was machen wir?" required></textarea>
+          <button id="sendBtn" type="submit" aria-label="Senden">➤</button>
+        </form>
+        <div class="statusline"><span id="connectionState">Bereit</span><button id="whyBtn" class="link hidden" type="button">Warum?</button></div>
+      </section>
+
+      <section id="memoryView" class="view">
+        <div class="section-head"><div><h2>Erinnerungen</h2><p>Was SOLI sich für dich ausdrücklich merken darf.</p></div><button id="refreshMemories" class="ghost" type="button">↻</button></div>
+        <form id="memoryForm" class="stack card compact">
+          <label>Neue Erinnerung</label>
+          <textarea id="memoryContent" rows="2" maxlength="1000" placeholder="Zum Beispiel: Bei wichtigen Entscheidungen möchte ich erst darüber schlafen."></textarea>
+          <select id="memoryType">
+            <option value="PREFERENCE">Präferenz</option>
+            <option value="GOAL">Ziel</option>
+            <option value="WORKFLOW">Arbeitsweise</option>
+            <option value="USER_EXPLICIT_FACT">Von mir genannte Information</option>
+          </select>
+          <button type="submit">Merken</button>
+        </form>
+        <div id="memoryList" class="memory-list"></div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="card">
+          <h2>Einstellungen</h2>
+          <div class="setting-row"><span>Backend</span><strong id="providerLabel">–</strong></div>
+          <div class="setting-row"><span>PWA</span><strong id="pwaLabel">bereit</strong></div>
+          <div class="setting-row"><span>Zugangsschutz</span><strong id="authLabel">–</strong></div>
+          <button id="logoutBtn" class="danger ghost hidden" type="button">Zugangsschlüssel vergessen</button>
+        </div>
+        <div class="card"><h3>Grundsatz</h3><p class="fine">SOLI SUN soll hilfreich arbeiten, ohne Wahrheit, Freiheit, Privatsphäre oder die Rechte anderer zu opfern. Die mobile Oberfläche speichert keine API-Schlüssel des Modellanbieters.</p></div>
+      </section>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
