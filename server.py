@@ -374,9 +374,9 @@ class Handler(BaseHTTPRequestHandler):
                     mode = "SOLI ☀️"
 
                 except Exception as e:
-                  print(f"OPENAI ERROR: {type(e).__name__}: {e}", flush=True)
-                    response = "Die Verbindung zum Sprachmodell hat gerade nicht funktioniert."
-                    mode = "MODEL ERROR"
+                 print(f"OPENAI ERROR: {type(e).__name__}: {e}", flush=True)
+              response = "Die Verbindung zum Sprachmodell hat gerade nicht funktioniert."
+                  mode = "MODEL ERROR"
             self.send_json(200, {
                 "run_id":uuid.uuid4().hex,
                 "response":response,
