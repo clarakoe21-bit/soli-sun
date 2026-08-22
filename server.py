@@ -373,7 +373,7 @@ class Handler(BaseHTTPRequestHandler):
                     response = "\n".join(texts).strip() or "Ich konnte gerade keine Antwort erzeugen."
                     mode = "SOLI ☀️"
 
-                except Exception as e:
+                except Exception as e:print(f"OPENAI ERROR: {type(e).__name__}: {e}", flush=True)
                     response = "Die Verbindung zum Sprachmodell hat gerade nicht funktioniert."
                     mode = "MODEL ERROR"
             self.send_json(200, {
