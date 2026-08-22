@@ -331,7 +331,51 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             mode, response = classify_response(msg)
+            if mode.startswith("NORMAL"):
+                try:
+                    from urllib import request
 
+                    api_key = os.getenv("OPENAI_API_KEY", "")
+                    model = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
+
+                    payload = json.dumps({
+                        "model": model,
+                        "instructions": (
+                            "Du bist SOLI SUN. Antworte auf Deutsch, warm, klar und ehrlich. "
+                            "Mensch und Modell begegnen sich auf Augenhöhe; keiner herrscht über den anderen. "
+                            "Trenne Tatsachen von Vermutungen. "
+                            "Unterstütze Selbstbestimmung statt Kontrolle. "
+                            "Behaupte nicht zu wissen, was andere Menschen denken oder fühlen. "
+                            "Wenn etwas unklar ist, sag es offen."
+                        ),
+                        "input": msg
+                    }).encode("utf-8")
+
+                    req = request.Request(
+                        "https://api.openai.com/v1/responses",
+                        data=payload,
+                        headers={
+                            "Authorization": f"Bearer {api_key}",
+                            "Content-Type": "application/json",
+                        },
+                        method="POST",
+                    )
+
+                    with request.urlopen(req, timeout=45) as r:
+                        result = json.loads(r.read().decode("utf-8"))
+
+                    texts = []
+                    for item in result.get("output", []):
+                        for content in item.get("content", []):
+                            if content.get("type") == "output_text":
+                                texts.append(content.get("text", ""))
+
+                    response = "\n".join(texts).strip() or "Ich konnte gerade keine Antwort erzeugen."
+                    mode = "SOLI ☀️"
+
+                except Exception as e:
+                    response = "Die Verbindung zum Sprachmodell hat gerade nicht funktioniert."
+                    mode = "MODEL ERROR"
             self.send_json(200, {
                 "run_id":uuid.uuid4().hex,
                 "response":response,
